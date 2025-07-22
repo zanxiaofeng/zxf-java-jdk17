@@ -31,11 +31,11 @@ public class JDK17Tests {
 
         //Java 15+ with Text Blocks
         String json = """
-              {
-                "name": "Ainan",
-                "role": "Developer"
-              }
-              """;
+                {
+                  "name": "Ainan",
+                  "role": "Developer"
+                }
+                """;
 
         Object obj = "13234";
         // Java 8
@@ -72,5 +72,48 @@ public class JDK17Tests {
     // - constructor
     // - getters (named exactly like the field, i.e., user.name())
     // - equals(), hashCode(), and toString() methods
-    record User2(String name) {}
+    record User2(String name) {
+    }
+
+    record Rectangle(double length, double width) {
+        public Rectangle {
+            if (length <= 0 || width <= 0) {
+                throw new java.lang.IllegalArgumentException(
+                        String.format("Invalid dimensions: %f, %f", length, width));
+            }
+        }
+
+        // Static field
+        static double goldenRatio;
+
+        // Static initializer
+        static {
+            goldenRatio = (1 + Math.sqrt(5)) / 2;
+        }
+
+        // Static method
+        public static Rectangle createGoldenRectangle(double width) {
+            return new Rectangle(width, width * goldenRatio);
+        }
+
+        // Nested record class
+        record RotationAngle(double angle) {
+            public RotationAngle {
+                angle = Math.toRadians(angle);
+            }
+        }
+
+        // Public instance method
+        public Rectangle getRotatedRectangleBoundingBox(double angle) {
+            RotationAngle ra = new RotationAngle(angle);
+            double x = Math.abs(length * Math.cos(ra.angle())) +
+                    Math.abs(width * Math.sin(ra.angle()));
+            double y = Math.abs(length * Math.sin(ra.angle())) +
+                    Math.abs(width * Math.cos(ra.angle()));
+            return new Rectangle(x, y);
+        }
+    }
+
+    record Triangle<C>(C top, C left, C right) {
+    }
 }
