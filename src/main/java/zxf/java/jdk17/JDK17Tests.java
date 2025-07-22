@@ -1,5 +1,6 @@
 package zxf.java.jdk17;
 
+import java.awt.print.Printable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,6 +115,10 @@ public class JDK17Tests {
         }
     }
 
-    record Triangle<C>(C top, C left, C right) {
+    record Triangle<C>(C top, C left, C right) implements AutoCloseable {
+        @Override
+        public void close() throws Exception {
+            System.out.println("Closing Triangle");
+        }
     }
 }
